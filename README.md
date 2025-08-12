@@ -1,63 +1,45 @@
-# 📡 Real-Time Streaming Pipeline – Timestamp-based CDC (On-Premises)  
-**MySQL → Confluent Kafka → Databricks (Spark) → Astra DB (Cassandra)**
-
----
+# Real-Time CDC Pipeline – MySQL → Kafka → Spark Structured Streaming → Cassandra
 
 ## 📌 Overview
-This project demonstrates a **real-time streaming pipeline** running **on-premises**, where changes in **MySQL** are detected via a `last_updated` timestamp column, streamed into **Confluent Kafka**, processed in **Databricks (Spark Structured Streaming)**, and stored in **Astra DB** for real-time analytics.
+This project implements a **real-time Change Data Capture (CDC)** pipeline without Debezium or Kafka Connect, using a **timestamp-based CDC** approach.  
+It streams only changed rows from **MySQL** into **Kafka**, processes them in **Apache Spark Structured Streaming**, and writes the results into **Cassandra** for real-time analytics.
 
-Unlike typical CDC setups, this implementation **does not use Kafka Connect or Debezium** — instead, Spark queries MySQL incrementally and publishes the results to Kafka.
+## 🚀 Architecture
+**Flow:**
+MySQL (with last_updated timestamp)
+↓ (CDC fetch of new/updated rows)
+Kafka Producer (Python)
+↓
+Apache Kafka
+↓
+Spark Structured Streaming (Databricks)
+↓
+Cassandra (Astra DB or on-prem)
 
----
 
-## 🚀 Architecture Flow
-1. **MySQL** (on-prem)  
-   - Source database  
-   - CDC tracked using a `last_updated` timestamp column  
-
-2. **Spark Structured Streaming (Databricks)**  
-   - Reads new/updated rows from MySQL (where `last_updated > last_processed_time`)  
-   - Publishes incremental data to **Kafka** topics  
-
-3. **Confluent Kafka**  
-   - Serves as a distributed event log  
-   - Allows multiple consumers to process the same change events  
-
-4. **Databricks** (streaming consumer)  
-   - Reads data from Kafka topics  
-   - Applies transformations & data enrichment  
-
-5. **Astra DB**  
-   - Cassandra-compatible database for storing analytics-ready data  
-   - Supports real-time queries & dashboards  
+**Key Features**
+- Real-time ingestion without Debezium/Kafka Connect
+- Timestamp-based incremental fetch (no full table scan)
+- Sub-minute end-to-end latency
+- Fault-tolerant & scalable processing
+- Ready for operational dashboards & alerts
 
 ---
 
-## 🖼 Architecture Diagram
-![Architecture Diagram](architecture.png)
-
----
-
-## ✨ Key Features
-- **CDC without Kafka Connect** — pure timestamp-based incremental pull  
-- **Near real-time latency** — data available in seconds  
-- **Scalable event streaming** using Kafka  
-- **Fault-tolerant processing** with Spark Structured Streaming  
-- **Real-time query-ready data** in Astra DB  
-
----
-
-## 🛠 Tech Stack
-- **MySQL** – Relational DB (CDC source)  
-- **Confluent Kafka** – Distributed event streaming platform  
-- **Databricks (Spark)** – Data ingestion, transformation & streaming analytics  
-- **Astra DB** – Cassandra-compatible analytics store  
+## 🛠️ Tech Stack
+- **MySQL** – Source database (with `last_updated` timestamp)
+- **Apache Kafka** – Messaging backbone
+- **Python** – Kafka producer for CDC
+- **Apache Spark Structured Streaming (Databricks)** – Real-time processing
+- **Cassandra / Astra DB** – Analytics storage
 
 ---
 
 ## 📊 Use Cases
-- Live business metrics dashboards  
-- Real-time inventory tracking  
-- Fraud detection with streaming alerts  
+- **Business Metrics Dashboard** – Always up-to-date KPIs like orders, revenue, and customer activity
+- **Operational Alerts** – Trigger notifications when anomalies are detected in the data stream
 
 ---
+
+## 📸 Architecture Diagram
+![Architecture](architecture.png)
