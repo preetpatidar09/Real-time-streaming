@@ -34,7 +34,7 @@ Unlike typical CDC setups, this implementation **does not use Kafka Connect or D
 ---
 
 ## 🖼 Architecture Diagram
-![Architecture Diagram](assets/architecture.png)
+![Architecture Diagram](architecture.png)
 
 ---
 
