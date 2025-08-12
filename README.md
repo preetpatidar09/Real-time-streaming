@@ -61,10 +61,3 @@ Unlike typical CDC setups, this implementation **does not use Kafka Connect or D
 - Fraud detection with streaming alerts  
 
 ---
-
-## ⚙️ How It Works
-
-### 1️⃣ MySQL Setup for CDC
-```sql
-ALTER TABLE orders 
-ADD COLUMN last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
